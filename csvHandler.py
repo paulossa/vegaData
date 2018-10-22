@@ -4,18 +4,9 @@ import pandas as pd
 cols = ['situacao', 'votos', 'ano', 'turno']
 
 data = pd.read_csv('comp.csv')[cols]
-data = data.query('situacao in ["COMPARECIMENTO", "ABSTENÇÃO"]')
+data = data.query('situacao in ["COMPARECIMENTO", "ABSTENÇÃO"] & turno == 1')
 
-print("Data antes de processo ")
-#print(data)
+data['votos'] = pd.to_numeric(data['votos']) # If u don't cast it to integer it GETS CRAZZZZYYYYYYY
+sumarioGeral = data.groupby(['situacao', 'ano', 'turno'])['votos'].agg('sum')
 
-sumarioGeral = data.groupby(['situacao', 'ano', 'turno']).sum()
-
-s1 = data.query('ano == 1989').sum()        
-print(s1)
-
-
-for it in sumarioGeral.items():
-    print(it[0])
-   #print(it[1])
-sumarioGeral.to_csv('myCsv.csv', header=True)
+sumarioGeral.to_csv('comparecimento.csv', header=True)
