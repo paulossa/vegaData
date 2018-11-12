@@ -1,0 +1,36 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.json",
+  "description": "Nota por estado civil",
+  "data": {
+      "url": "https://raw.githubusercontent.com/paulossa/vegaData/master/enade/treated.csv"
+      },
+  "transform": [
+      {"filter": "datum.QE_I01"}
+  ],
+  "mark": "tick",
+  "encoding": {
+    "x": {"title": "Estado Civil","field": "QE_I01", "type": "nominal"},
+    "y": {"title": "Nota Geral", "field": "NT_GER", "type": "quantitative"}
+  }
+}
+
+
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.json",
+  "description": "A scatterplot showing horsepower and miles per gallons.",
+  "data": {
+      "url": "https://raw.githubusercontent.com/paulossa/vegaData/master/enade/treated.csv"
+      },
+  "transform": [
+      {"filter": "datum.QE_I01"},
+      {"calculate": "datum.QE_I04 + ' ' + datum.QE_I05", "as": "esc_pais"},
+      {
+          "aggregate": [{"op": "median", "field": "NT_GER", "as": "NT_MED"}],           "groupby":      ["esc_pais"]
+      }
+  ],
+  "mark": "point",
+  "encoding": {
+    "x": {"title": "Estado Civil","field": "esc_pais", "type": "nominal"},
+    "y": {"title": "Nota Geral", "field": "NT_MED", "type": "quantitative", "sort": "ascending"}
+  }
+}
